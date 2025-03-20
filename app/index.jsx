@@ -186,7 +186,7 @@ const HomeScreen = () => {
           />
         )}
 
-        {/* Sliding panel with gradient */}
+        {/* panel with gradient */}
         <Animated.View style={[styles.panel, { height: panelHeight }]}>
           {isPanelOpen && (
             <LinearGradient
@@ -217,7 +217,7 @@ const HomeScreen = () => {
           )}
         </Animated.View>
 
-        {/* Reduced extra space to about 3 inches (60-80 px). Adjust as needed. */}
+        {/* The reason why the After Build module is in the bottom */}
         <View style={{ height: 0 }} />
       </View>
     </ScrollView>
@@ -233,6 +233,8 @@ const ModuleCard = ({ image, title, subtitle }) => (
     </View>
   </View>
 );
+
+
 
 const styles = StyleSheet.create({
   /* Outer container */
