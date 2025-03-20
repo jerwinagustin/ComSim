@@ -1,3 +1,5 @@
+//Wag mo pala to pakelaman HAHHAHA
+
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
