@@ -9,8 +9,10 @@ import {
   Easing,
   ScrollView
 } from "react-native";
-// If using Expo:
+
 import { LinearGradient } from "expo-linear-gradient";
+
+import { useRouter } from "expo-router";
 
 const ARROW_OFFSET = 5;
 const ARROW_HALF_WIDTH = 10;
@@ -19,8 +21,8 @@ const PANEL_OPEN_HEIGHT = 500;
 const HomeScreen = () => {
   const [selectedButton, setSelectedButton] = useState("");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const router = useRouter();
 
-  // Animated height for the sliding panel
   const panelHeight = useRef(new Animated.Value(0)).current;
 
   // Arrow position
@@ -193,11 +195,14 @@ const HomeScreen = () => {
               colors={["#E2DFDF", "#ffffff"]}
               style={styles.gradientPanel}
             >
-              <ModuleCard
-                image={require("@/assets/images/ComponentMod.png")}
-                title="Introduction to pc components"
-                subtitle="A module where you can learn the basics of components."
-              />
+              {/* Wrapped the first ModuleCard in a TouchableOpacity that navigates to the Introduction screen */}
+              <TouchableOpacity onPress={() => router.push("/Introduction")}>
+                <ModuleCard
+                  image={require("@/assets/images/ComponentMod.png")}
+                  title="Introduction to pc components"
+                  subtitle="A module where you can learn the basics of components."
+                />
+              </TouchableOpacity>
               <ModuleCard
                 image={require("@/assets/images/SelectionMod.png")}
                 title="Parts selection guide for building pc"
@@ -233,8 +238,6 @@ const ModuleCard = ({ image, title, subtitle }) => (
     </View>
   </View>
 );
-
-
 
 const styles = StyleSheet.create({
   /* Outer container */
