@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     borderTopColor: "#FFD700",
   },
 
-  /* Sliding panel */
+  /* Sliding on panel */
   panel: {
     width: "100%",
     overflow: "hidden",
