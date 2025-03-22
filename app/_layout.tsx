@@ -7,11 +7,14 @@ import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
+
 import { useColorScheme } from '@/hooks/useColorScheme';
 
 
 import HomeScreen from './index';
 import Introduction from './Introduction';
+import module2 from './module2';
+import React from 'react';
 
 
 SplashScreen.preventAutoHideAsync();
@@ -59,6 +62,21 @@ export default function RootLayout() {
           sharedElements={(route, otherRoute, showing) => {
             // The shared element id must match on both screens.
             return ["module-intro"];
+          }}
+        />
+          {/* Module 2 Screen */}
+          <Stack.Screen 
+          name="Module2" 
+          component={module2} 
+          options={{
+            title: "Module 2: Parts Selection",
+            transitionSpec: {
+              open: { animation: 'timing', config: { duration: 300 } },
+              close: { animation: 'timing', config: { duration: 300 } },
+            },
+          }}
+          sharedElements={(route, otherRoute, showing) => {
+            return ["module2-intro"];
           }}
         />
       </Stack.Navigator>

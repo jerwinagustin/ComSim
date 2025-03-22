@@ -191,34 +191,44 @@ const HomeScreen = () => {
         {/* panel with gradient */}
         <Animated.View style={[styles.panel, { height: panelHeight }]}>
           {isPanelOpen && (
-            <LinearGradient
-              colors={["#E2DFDF", "#ffffff"]}
-              style={styles.gradientPanel}
-            >
-              {/* Wrapped the first ModuleCard in a TouchableOpacity that navigates to the Introduction screen */}
-              <TouchableOpacity onPress={() => router.push("/Introduction")}>
-                <ModuleCard
-                  image={require("@/assets/images/ComponentMod.png")}
-                  title="Introduction to pc components"
-                  subtitle="A module where you can learn the basics of components."
-                />
-              </TouchableOpacity>
-              <ModuleCard
-                image={require("@/assets/images/SelectionMod.png")}
-                title="Parts selection guide for building pc"
-                subtitle="Select, upgrade, and know everything about the parts."
-              />
-              <ModuleCard
-                image={require("@/assets/images/BuildingMod.png")}
-                title="How to build your pc?"
-                subtitle="Get started at how to build it from scratch!"
-              />
-              <ModuleCard
-                image={require("@/assets/images/AfterBuildMod.png")}
-                title="What to do after building your pc?"
-                subtitle="Having trouble after building your pc? this module is for you."
-              />
-            </LinearGradient>
+      <LinearGradient colors={["#E2DFDF", "#ffffff"]} style={styles.gradientPanel}>
+      {/* Introduction Module */}
+      <TouchableOpacity onPress={() => router.push("/Introduction")}>
+        <ModuleCard
+          image={require("@/assets/images/ComponentMod.png")}
+          title="Introduction to pc components"
+          subtitle="A module where you can learn the basics of components."
+        />
+      </TouchableOpacity>
+    
+      {/* Parts Selection Guide dio alam kung tama yan nagiging clickable pero ayaw  */}
+      <TouchableOpacity onPress={() => router.push("/module2.jsx")}> 
+        <ModuleCard
+          image={require("@/assets/images/ComponentMod.png")}
+          title="Parts selection guide for building pc"
+          subtitle="Select, upgrade, and know everything about the parts."
+        />
+      </TouchableOpacity>
+    
+      {/* How to Build a PC */}
+      <TouchableOpacity onPress={() => router.push("/BuildPC")}>
+        <ModuleCard
+          image={require("@/assets/images/BuildingMod.png")}
+          title="How to build your pc?"
+          subtitle="Get started at how to build it from scratch!"
+        />
+      </TouchableOpacity>
+    
+      {/* After Building a PC */}
+      <TouchableOpacity onPress={() => router.push("/AfterBuild")}>
+        <ModuleCard
+          image={require("@/assets/images/AfterBuildMod.png")}
+          title="What to do after building your pc?"
+          subtitle="Having trouble after building your pc? This module is for you."
+        />
+      </TouchableOpacity>
+    </LinearGradient>
+    
           )}
         </Animated.View>
 
