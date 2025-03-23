@@ -202,12 +202,18 @@ const HomeScreen = () => {
                   title="Introduction to pc components"
                   subtitle="A module where you can learn the basics of components."
                 />
+              
+
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => router.push("/Parts")}>
               <ModuleCard
                 image={require("@/assets/images/SelectionMod.png")}
                 title="Parts selection guide for building pc"
                 subtitle="Select, upgrade, and know everything about the parts."
               />
+              </TouchableOpacity>
+              
               <ModuleCard
                 image={require("@/assets/images/BuildingMod.png")}
                 title="How to build your pc?"

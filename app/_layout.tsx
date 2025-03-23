@@ -12,6 +12,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 import HomeScreen from './index';
 import Introduction from './Introduction';
+import Parts from './Parts'
 
 
 SplashScreen.preventAutoHideAsync();
@@ -61,6 +62,18 @@ export default function RootLayout() {
             return ["module-intro"];
           }}
         />
+        <Stack.Screen 
+          name="Parts"
+          component={Parts}
+          options={{
+            title: "Parts Selection Guide",
+            gestureEnabled: false,
+            transitionSpec: {
+              open: { animation: 'timing', config: { duration: 300 } },
+              close: { animation: 'timing', config: { duration: 300 } },
+            },
+
+          }}/>
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>
