@@ -13,7 +13,8 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import HomeScreen from './index';
 import Introduction from './Introduction';
 import Parts from './Parts'
-
+import How_To from './How_To'
+import After_Build from './After_Build'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,6 +68,31 @@ export default function RootLayout() {
           component={Parts}
           options={{
             title: "Parts Selection Guide",
+            gestureEnabled: false,
+            transitionSpec: {
+              open: { animation: 'timing', config: { duration: 300 } },
+              close: { animation: 'timing', config: { duration: 300 } },
+            },
+
+          }}/>
+          <Stack.Screen 
+          name="How_To"
+          component={How_To}
+          options={{
+            title: " How to Build a PC",
+            gestureEnabled: false,
+            transitionSpec: {
+              open: { animation: 'timing', config: { duration: 300 } },
+              close: { animation: 'timing', config: { duration: 300 } },
+            },
+
+          }}/>
+
+<Stack.Screen 
+          name="After_Build"
+          component={After_Build}
+          options={{
+            title: "What to Do After Building Your PC",
             gestureEnabled: false,
             transitionSpec: {
               open: { animation: 'timing', config: { duration: 300 } },

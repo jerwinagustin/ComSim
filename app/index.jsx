@@ -13,6 +13,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 
 import { useRouter } from "expo-router";
+import { push } from "expo-router/build/global-state/routing";
 
 const ARROW_OFFSET = 5;
 const ARROW_HALF_WIDTH = 10;
@@ -214,16 +215,22 @@ const HomeScreen = () => {
               />
               </TouchableOpacity>
               
+              <TouchableOpacity onPress={() => router.push("/How_To")}>
               <ModuleCard
                 image={require("@/assets/images/BuildingMod.png")}
                 title="How to build your pc?"
                 subtitle="Get started at how to build it from scratch!"
               />
+              </TouchableOpacity>
+              
+              <TouchableOpacity onPress={() => router.push("/After_Build")}>
               <ModuleCard
                 image={require("@/assets/images/AfterBuildMod.png")}
                 title="What to do after building your pc?"
                 subtitle="Having trouble after building your pc? this module is for you."
               />
+              </TouchableOpacity>
+              
             </LinearGradient>
           )}
         </Animated.View>
