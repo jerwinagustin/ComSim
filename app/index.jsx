@@ -7,13 +7,12 @@ import {
   StyleSheet,
   Animated,
   Easing,
-  ScrollView
+  ScrollView,
 } from "react-native";
 
 import { LinearGradient } from "expo-linear-gradient";
-
 import { useRouter } from "expo-router";
-import { push } from "expo-router/build/global-state/routing";
+import { SharedElement } from "react-navigation-shared-element";
 
 const ARROW_OFFSET = 5;
 const ARROW_HALF_WIDTH = 10;
@@ -22,6 +21,7 @@ const PANEL_OPEN_HEIGHT = 500;
 const HomeScreen = () => {
   const [selectedButton, setSelectedButton] = useState("");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
+  const [isQuizPanelOpen, setIsQuizPanelOpen] = useState(false);
   const router = useRouter();
 
   const panelHeight = useRef(new Animated.Value(0)).current;
@@ -35,7 +35,7 @@ const HomeScreen = () => {
   const learnRef = useRef(null);
   const quizRef = useRef(null);
 
-  // Toggle panel open/close
+  // Toggle the Learning panel open/close
   const togglePanel = () => {
     if (isPanelOpen) {
       Animated.timing(panelHeight, {
@@ -47,7 +47,27 @@ const HomeScreen = () => {
     } else {
       setIsPanelOpen(true);
       Animated.timing(panelHeight, {
-        toValue: PANEL_OPEN_HEIGHT, // bigger so all cards fit
+        toValue: PANEL_OPEN_HEIGHT,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }).start();
+    }
+  };
+
+  // Toggle the Quiz panel open/close (fixed useNativeDriver typo)
+  const toggleQuizPanel = () => {
+    if (isQuizPanelOpen) {
+      Animated.timing(panelHeight, {
+        toValue: 0,
+        duration: 300,
+        easing: Easing.ease,
+        useNativeDriver: false,
+      }).start(() => setIsQuizPanelOpen(false));
+    } else {
+      setIsQuizPanelOpen(true);
+      Animated.timing(panelHeight, {
+        toValue: PANEL_OPEN_HEIGHT,
         duration: 300,
         easing: Easing.ease,
         useNativeDriver: false,
@@ -74,21 +94,40 @@ const HomeScreen = () => {
     );
   };
 
-  // Button press
+  // Button press handler
   const handlePress = (button) => {
     setSelectedButton(button);
     if (button === "learn") {
       moveArrow(learnRef);
-      togglePanel();
-    } else if (button === "quiz") {
-      moveArrow(quizRef);
-      if (isPanelOpen) {
+      if (isQuizPanelOpen) {
+        // Close the quiz panel first then open the learning panel
         Animated.timing(panelHeight, {
           toValue: 0,
           duration: 300,
           easing: Easing.ease,
           useNativeDriver: false,
-        }).start(() => setIsPanelOpen(false));
+        }).start(() => {
+          setIsQuizPanelOpen(false);
+          togglePanel();
+        });
+      } else {
+        togglePanel();
+      }
+    } else if (button === "quiz") {
+      moveArrow(quizRef);
+      if (isPanelOpen) {
+        // Close the learning panel first then open the quiz panel
+        Animated.timing(panelHeight, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.ease,
+          useNativeDriver: false,
+        }).start(() => {
+          setIsPanelOpen(false);
+          toggleQuizPanel();
+        });
+      } else {
+        toggleQuizPanel();
       }
     }
   };
@@ -189,53 +228,61 @@ const HomeScreen = () => {
           />
         )}
 
-        {/* panel with gradient */}
+        {/* Single animated panel that conditionally renders content */}
         <Animated.View style={[styles.panel, { height: panelHeight }]}>
-          {isPanelOpen && (
+          {isPanelOpen && selectedButton === "learn" && (
             <LinearGradient
               colors={["#E2DFDF", "#ffffff"]}
               style={styles.gradientPanel}
             >
-              {/* Wrapped the first ModuleCard in a TouchableOpacity that navigates to the Introduction screen */}
-              <TouchableOpacity onPress={() => router.push("/Introduction")}>
+              <TouchableOpacity onPress={() => router.push("/Learning_Modules/Introduction")}>
                 <ModuleCard
                   image={require("@/assets/images/ComponentMod.png")}
                   title="Introduction to pc components"
                   subtitle="A module where you can learn the basics of components."
                 />
-              
-
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push("/Parts")}>
-              <ModuleCard
-                image={require("@/assets/images/SelectionMod.png")}
-                title="Parts selection guide for building pc"
-                subtitle="Select, upgrade, and know everything about the parts."
-              />
+              <TouchableOpacity onPress={() => router.push("/LearningModules/Parts")}>
+                <ModuleCard
+                  image={require("@/assets/images/SelectionMod.png")}
+                  title="Parts selection guide for building pc"
+                  subtitle="Select, upgrade, and know everything about the parts."
+                />
               </TouchableOpacity>
-              
+
               <TouchableOpacity onPress={() => router.push("/How_To")}>
-              <ModuleCard
-                image={require("@/assets/images/BuildingMod.png")}
-                title="How to build your pc?"
-                subtitle="Get started at how to build it from scratch!"
-              />
+                <ModuleCard
+                  image={require("@/assets/images/BuildingMod.png")}
+                  title="How to build your pc?"
+                  subtitle="Get started at how to build it from scratch!"
+                />
               </TouchableOpacity>
-              
+
               <TouchableOpacity onPress={() => router.push("/After_Build")}>
-              <ModuleCard
-                image={require("@/assets/images/AfterBuildMod.png")}
-                title="What to do after building your pc?"
-                subtitle="Having trouble after building your pc? this module is for you."
-              />
+                <ModuleCard
+                  image={require("@/assets/images/AfterBuildMod.png")}
+                  title="What to do after building your pc?"
+                  subtitle="Having trouble after building your pc? this module is for you."
+                />
               </TouchableOpacity>
-              
+            </LinearGradient>
+          )}
+
+          {isQuizPanelOpen && selectedButton === "quiz" && (
+            <LinearGradient
+              colors={["#E2DFDF", "#ffffff"]}
+              style={styles.gradientPanel}
+            >
+
+              <TouchableOpacity onPress={() => router.push("")}>
+
+              </TouchableOpacity>
+             
             </LinearGradient>
           )}
         </Animated.View>
 
-        {/* The reason why the After Build module is in the bottom */}
         <View style={{ height: 0 }} />
       </View>
     </ScrollView>
@@ -253,7 +300,6 @@ const ModuleCard = ({ image, title, subtitle }) => (
 );
 
 const styles = StyleSheet.create({
-  /* Outer container */
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -262,8 +308,6 @@ const styles = StyleSheet.create({
     position: "relative",
     padding: 12,
   },
-
-  /* Header */
   header: {
     flexDirection: "row",
     alignItems: "flex-end",
@@ -289,8 +333,6 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     color: "#212121",
   },
-
-  /* Slogan */
   mainTextRow: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -307,8 +349,6 @@ const styles = StyleSheet.create({
     fontWeight: "300",
     color: "#1A73E8",
   },
-
-  /* Main Image */
   imageContainer: {
     position: "relative",
     width: "100%",
@@ -329,8 +369,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     padding: 15,
   },
-
-  /* Section Title */
   sectionTitle: {
     fontSize: 24,
     fontWeight: "400",
@@ -338,8 +376,6 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     textAlign: "center",
   },
-
-  /* Buttons */
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -363,8 +399,6 @@ const styles = StyleSheet.create({
     color: "#000",
     fontWeight: "bold",
   },
-
-  /* Arrow */
   arrow: {
     position: "absolute",
     zIndex: 999,
@@ -377,8 +411,6 @@ const styles = StyleSheet.create({
     borderRightColor: "transparent",
     borderTopColor: "#FFD700",
   },
-
-  /* Sliding on panel */
   panel: {
     width: "100%",
     overflow: "hidden",
@@ -392,8 +424,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingBottom: 20,
   },
-
-  /* Module cards */
   moduleCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -401,8 +431,6 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 16,
     marginBottom: 16,
-
-    // Subtle shadow
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

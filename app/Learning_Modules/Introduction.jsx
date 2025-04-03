@@ -1,6 +1,7 @@
 import React from "react";
 import { ScrollView, Text, StyleSheet, View } from "react-native";
 import Svg, { Path } from 'react-native-svg';
+import { SharedElement } from "react-navigation-shared-element";
 
 const Introduction = () => {
   return (
@@ -10,7 +11,7 @@ const Introduction = () => {
       {/* Title of the module */}
       
       
-      <Text style={styles.title}>Introduction to PC Components</Text>
+      <Text style={styles.title}>Module 1: Introduction to PC Components</Text>
 
       {/* Description of what the module is about */}
       <Text style={styles.description}>
@@ -81,45 +82,45 @@ const Introduction = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 12, // Adds padding inside the container
-    backgroundColor: "#f4f4f4", // Light gray background color
+    padding: 12,
+    backgroundColor: "#f4f4f4",
   },
   title: {
-    fontSize: 24, // Large font size for the title
-    fontWeight: "bold", // Makes the title bold
+    fontSize: 24,
+    fontWeight: "bold",
     textAlign: "center",
+    color: "#1A73E8",
     marginTop: 30,
-    color: "#1a73e8", // Blue color for the title
-    marginBottom: 50, // Adds space below the title
+    marginBottom: 50,
   },
   description: {
-    fontSize: 16, // Regular font size for description
-    color: "#555", // Dark gray color for text
+    fontSize: 16,
+    color: "#555",
     textAlign: "justify",
-    marginBottom: 20, // Adds space below the description
-    lineHeight: 22, // Increases line spacing for readability
+    marginBottom: 20,
+    lineHeight: 22,
   },
   section: {
-    marginBottom: 16, // Adds space between sections
-    padding: 12, // Adds padding inside each section
-    backgroundColor: "#ffffff", // White background for sections
-    borderRadius: 16, // Rounds the corners of the section boxes
-    elevation: 2, // Adds a shadow effect to the sections
-    shadowColor: "#000", // Black shadow color
-    shadowOffset: { width: 0, height: 2 }, // Shadow offset
-    shadowOpacity: 0.1, // Shadow opacity
-    shadowRadius: 3, // Shadow blur radius
+    marginBottom: 16,
+    padding: 12,
+    backgroundColor: "#ffffff",
+    borderRadius: 16,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 3
   },
   heading: {
-    fontSize: 18, // Slightly larger font for headings
-    fontWeight: "600", // Semi-bold font weight for headings
-    color: "#222", // Darker color for headings
-    marginBottom: 4, // Adds space below the heading
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#222",
+    marginBottom: 8,
   },
   text: {
-    fontSize: 16, // Regular font size for text
-    color: "#555", // Dark gray text color
-    lineHeight: 22, // Increases line spacing for readability
+    fontSize: 16,
+    color: "#555",
+    lineHeight: 22,
     textAlign: "justify",
   },
 });

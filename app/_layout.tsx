@@ -11,10 +11,10 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 
 import HomeScreen from './index';
-import Introduction from './Introduction';
-import Parts from './Parts'
-import How_To from './How_To'
-import After_Build from './After_Build'
+import Introduction from './Learning_Modules/Introduction';
+import Parts from './Learning_Modules/Parts'
+import How_To from './Learning_Modules/How_To'
+import After_Build from './Learning_Modules/After_Build'
 
 SplashScreen.preventAutoHideAsync();
 
@@ -58,10 +58,6 @@ export default function RootLayout() {
               close: { animation: 'timing', config: { duration: 300 } },
             },
           }}
-          sharedElements={(route, otherRoute, showing) => {
-            // The shared element id must match on both screens.
-            return ["module-intro"];
-          }}
         />
         <Stack.Screen 
           name="Parts"
@@ -88,7 +84,7 @@ export default function RootLayout() {
 
           }}/>
 
-<Stack.Screen 
+      <Stack.Screen 
           name="After_Build"
           component={After_Build}
           options={{

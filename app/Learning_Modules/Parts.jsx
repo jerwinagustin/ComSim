@@ -77,18 +77,21 @@ const Parts = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 12,
     backgroundColor: "#f4f4f4",
   },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#1a73e8",
-    marginBottom: 16,
+    textAlign: "center",
+    color: "#1A73E8",
+    marginTop: 30,
+    marginBottom: 50,
   },
   description: {
     fontSize: 16,
     color: "#555",
+    textAlign: "justify",
     marginBottom: 20,
     lineHeight: 22,
   },
@@ -96,19 +99,24 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     padding: 12,
     backgroundColor: "#ffffff",
-    borderRadius: 8,
+    borderRadius: 16,
     elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2},
+    shadowOpacity: 0.1,
+    shadowRadius: 3
   },
   heading: {
     fontSize: 18,
     fontWeight: "600",
     color: "#222",
-    marginBottom: 4,
+    marginBottom: 8,
   },
   text: {
     fontSize: 16,
     color: "#555",
     lineHeight: 22,
+    textAlign: "justify",
   },
 });
 
