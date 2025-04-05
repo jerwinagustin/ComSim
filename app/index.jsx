@@ -9,33 +9,104 @@ import {
   Easing,
   ScrollView,
 } from "react-native";
-
+import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter } from "expo-router";
+import { useRouter, useNavigation } from "expo-router";
 import { SharedElement } from "react-navigation-shared-element";
 
 const ARROW_OFFSET = 5;
 const ARROW_HALF_WIDTH = 10;
 const PANEL_OPEN_HEIGHT = 500;
 
+const CircularProgress = ({ score, size = 55, strokeWidth = 4, label }) => {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  // Calculate percentage
+  const percentage = (score / 20) * 100;
+  const strokeDashoffset = circumference - (circumference * percentage) / 100;
+
+  // Set color based on score; if score is 0, default to gray
+  let strokeColor = "gray";
+  if (score > 0 && score <= 9) {
+    strokeColor = "red";
+  } else if (score >= 10 && score <= 14) {
+    strokeColor = "orange";
+  } else if (score >= 15 && score < 20) {
+    strokeColor =  "#108ee9";
+  } else if (score === 20) {
+    strokeColor = "#87d068";
+  }
+
+  return (
+    <View style={{ width: size, height: size }}>
+      <Svg width={size} height={size}>
+        <Circle
+          stroke="#e6e6e6"
+          fill="none"
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={strokeWidth}
+        />
+        <Circle
+          stroke={strokeColor}
+          fill="none"
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          strokeWidth={strokeWidth}
+          strokeDasharray={`${circumference} ${circumference}`}
+          strokeDashoffset={strokeDashoffset}
+          strokeLinecap="round"
+        />
+      </Svg>
+      <View style={[StyleSheet.absoluteFill, styles.center]}>
+        <Text style={styles.scoreText}>
+          {label ? label : `${score}/20`}
+        </Text>
+      </View>
+    </View>
+  );
+};
+
+
+const QuizCard = ({ image, title, subtitle, score }) => {
+  return (
+    <View style={styles.quizCardContainer}>
+      <View style={styles.quizCardLeft}>
+        <Image source={image} style={styles.moduleImage} />
+        <View style={{ flex: 1, marginLeft: 0 }}>
+          <Text style={styles.moduleTitle}>{title}</Text>
+          <Text style={styles.moduleSubtitle}>{subtitle}</Text>
+        </View>
+      </View>
+      <View style={styles.quizCardRight}>
+        <CircularProgress
+          score={score}
+          label={score === 20 ? "PERFECT" : undefined}
+        />
+      </View>
+    </View>
+  );
+};
+
+
 const HomeScreen = () => {
+  const navigation = useNavigation();
   const [selectedButton, setSelectedButton] = useState("");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isQuizPanelOpen, setIsQuizPanelOpen] = useState(false);
   const router = useRouter();
-
   const panelHeight = useRef(new Animated.Value(0)).current;
-
-  // Arrow position
   const arrowX = useRef(new Animated.Value(0)).current;
   const arrowY = useRef(new Animated.Value(0)).current;
-
-  // Refs for measuring
   const containerRef = useRef(null);
   const learnRef = useRef(null);
   const quizRef = useRef(null);
 
-  // Toggle the Learning panel open/close
+  // Default quiz score is 0 until the user takes the quiz.
+  const quizScore = 2;
+
   const togglePanel = () => {
     if (isPanelOpen) {
       Animated.timing(panelHeight, {
@@ -55,7 +126,6 @@ const HomeScreen = () => {
     }
   };
 
-  // Toggle the Quiz panel open/close (fixed useNativeDriver typo)
   const toggleQuizPanel = () => {
     if (isQuizPanelOpen) {
       Animated.timing(panelHeight, {
@@ -75,7 +145,6 @@ const HomeScreen = () => {
     }
   };
 
-  // Move arrow under tapped button
   const moveArrow = (buttonRef) => {
     if (!buttonRef.current || !containerRef.current) return;
     buttonRef.current.measureLayout(
@@ -94,13 +163,11 @@ const HomeScreen = () => {
     );
   };
 
-  // Button press handler
   const handlePress = (button) => {
     setSelectedButton(button);
     if (button === "learn") {
       moveArrow(learnRef);
       if (isQuizPanelOpen) {
-        // Close the quiz panel first then open the learning panel
         Animated.timing(panelHeight, {
           toValue: 0,
           duration: 300,
@@ -116,7 +183,6 @@ const HomeScreen = () => {
     } else if (button === "quiz") {
       moveArrow(quizRef);
       if (isPanelOpen) {
-        // Close the learning panel first then open the quiz panel
         Animated.timing(panelHeight, {
           toValue: 0,
           duration: 300,
@@ -132,7 +198,6 @@ const HomeScreen = () => {
     }
   };
 
-  // Keep arrow aligned under the button while scrolling
   const handleScroll = () => {
     if (selectedButton === "learn") moveArrow(learnRef);
     if (selectedButton === "quiz") moveArrow(quizRef);
@@ -228,14 +293,14 @@ const HomeScreen = () => {
           />
         )}
 
-        {/* Single animated panel that conditionally renders content */}
+        {/* Animated Panel */}
         <Animated.View style={[styles.panel, { height: panelHeight }]}>
           {isPanelOpen && selectedButton === "learn" && (
             <LinearGradient
               colors={["#E2DFDF", "#ffffff"]}
               style={styles.gradientPanel}
             >
-              <TouchableOpacity onPress={() => router.push("/Learning_Modules/Introduction")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Introduction")}>
                 <ModuleCard
                   image={require("@/assets/images/ComponentMod.png")}
                   title="Introduction to pc components"
@@ -243,7 +308,7 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push("/LearningModules/Parts")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Parts")}>
                 <ModuleCard
                   image={require("@/assets/images/SelectionMod.png")}
                   title="Parts selection guide for building pc"
@@ -251,7 +316,7 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push("/How_To")}>
+              <TouchableOpacity onPress={() => navigation.navigate("How_To")}>
                 <ModuleCard
                   image={require("@/assets/images/BuildingMod.png")}
                   title="How to build your pc?"
@@ -259,7 +324,7 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push("/After_Build")}>
+              <TouchableOpacity onPress={() => navigation.navigate("After_Build")}>
                 <ModuleCard
                   image={require("@/assets/images/AfterBuildMod.png")}
                   title="What to do after building your pc?"
@@ -274,11 +339,43 @@ const HomeScreen = () => {
               colors={["#E2DFDF", "#ffffff"]}
               style={styles.gradientPanel}
             >
+              <TouchableOpacity onPress={() => navigation.navigate("ComponentsQuiz")}>
+                <QuizCard
+                  image={require("@/assets/images/ComponentMod.png")}
+                  title="Pc Components Quiz"
+                  subtitle="Tackle Your Knowledge of PC Components"
+                  score={quizScore}
+                />
+              </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => router.push("")}>
+              <TouchableOpacity onPress= {() => navigation.navigate("PartsQuiz")}>
+                <QuizCard 
+                  image={require("@/assets/images/SelectionMod.png")}
+                  title="PC Parts Quiz"
+                  subtitle="Do you know how to choose the right PC parts? Take this quiz to find out!"
+                  score={quizScore}
+                />
 
               </TouchableOpacity>
-             
+
+              <TouchableOpacity onPress={() => navigation.navigate("BuildQuiz")}>
+                <QuizCard
+                  image={require("@/assets/images/BuildingMod.png")}
+                  title="PC Builder Quiz"
+                  subtitle="Think you're ready to build a PC? Building a PC is essential—test your knowledge with this quiz!"
+                  score={quizRef}
+                />
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => navigation.navigate("AfterBuildingQuiz")}>
+                <QuizCard
+                  image={require("@/assets/images/AfterBuildMod.png")}
+                  title="PC Setup Quiz"
+                  subtitle="Do you know exactly what to do after building your PC? Take the quiz to find out!"
+                  score={quizRef}
+                />
+              </TouchableOpacity>
+
             </LinearGradient>
           )}
         </Animated.View>
@@ -288,6 +385,7 @@ const HomeScreen = () => {
     </ScrollView>
   );
 };
+
 
 const ModuleCard = ({ image, title, subtitle }) => (
   <View style={styles.moduleCard}>
@@ -452,6 +550,37 @@ const styles = StyleSheet.create({
   moduleSubtitle: {
     fontSize: 12,
     color: "#666",
+  },
+  center: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  scoreText: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  quizCardContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  quizCardLeft: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  quizCardRight: {
+    marginLeft: 10,
   },
 });
 

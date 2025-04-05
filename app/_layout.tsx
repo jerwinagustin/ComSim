@@ -15,6 +15,10 @@ import Introduction from './Learning_Modules/Introduction';
 import Parts from './Learning_Modules/Parts'
 import How_To from './Learning_Modules/How_To'
 import After_Build from './Learning_Modules/After_Build'
+import ComponentsQuiz from './Quizzes/ComponentsQuiz';
+import PartsQuiz from './Quizzes/PartsQuiz';
+import BuildQuiz from './Quizzes/BuildQuiz';
+import AfterBuildingQuiz from './Quizzes/AfterBuildingQuiz';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -96,6 +100,58 @@ export default function RootLayout() {
             },
 
           }}/>
+
+          <Stack.Screen 
+            name = "ComponentsQuiz"
+            component={ComponentsQuiz}
+            options={{
+              title: "Quizzes For Pc Components",
+              gestureEnabled: false,
+              transitionSpec: {
+                open: { animation: 'timing', config: { duration: 300 } },
+                close: { animation: 'timing', config: { duration: 300 } }
+              }
+            }}
+          />
+
+          <Stack.Screen 
+            name = "PartsQuiz"
+            component={PartsQuiz}
+            options={{
+              title: "Quizzes for Parts",
+              gestureEnabled: false,
+              transitionSpec: {
+                open: { animation: 'timing', config: { duration: 300 } },
+                close: { animation: 'timing', config: { duration: 300 }}
+              }
+            }}
+          />
+
+          <Stack.Screen 
+            name = "BuildQuiz"
+            component={BuildQuiz}
+            options={{
+              title: "Quizzes for Building your PC",
+              gestureEnabled: false,
+              transitionSpec: {
+                open: { animation: 'timing', config: { duration: 300 } },
+                close: { animation: 'timing', config: { duration: 300 }}
+              }
+            }}
+          />
+
+          <Stack.Screen 
+            name = "AfterBuildingQuiz"
+            component={AfterBuildingQuiz}
+            options={{
+              title: "Quizzes for PC Setup",
+              gestureEnabled: false,
+              transitionSpec: {
+                open: { animation: 'timing', config: { duration: 300 } },
+                close: { animation: 'timing', config: { duration: 300 }}
+              }
+            }}
+          />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>
