@@ -105,7 +105,10 @@ const HomeScreen = () => {
   const quizRef = useRef(null);
 
   // Default quiz score is 0 until the user takes the quiz.
-  const quizScore = 2;
+  const partsScore = 0;
+  const ComponentsScore = 0;
+  const BuildScore = 0;
+  const AfterBuildScore = 0;
 
   const togglePanel = () => {
     if (isPanelOpen) {
@@ -153,10 +156,12 @@ const HomeScreen = () => {
         Animated.spring(arrowX, {
           toValue: x + width / 2 - ARROW_HALF_WIDTH,
           useNativeDriver: false,
+          easing: Easing.ease
         }).start();
         Animated.spring(arrowY, {
           toValue: y + height + ARROW_OFFSET,
           useNativeDriver: false,
+          easing: Easing.ease
         }).start();
       },
       (err) => console.log("measureLayout error:", err)
@@ -176,6 +181,7 @@ const HomeScreen = () => {
         }).start(() => {
           setIsQuizPanelOpen(false);
           togglePanel();
+          
         });
       } else {
         togglePanel();
@@ -326,7 +332,7 @@ const HomeScreen = () => {
 
               <TouchableOpacity onPress={() => navigation.navigate("After_Build")}>
                 <ModuleCard
-                  image={require("@/assets/images/AfterBuildMod.png")}
+                  image={require("@/assets/images/AfterMod.png")}
                   title="What to do after building your pc?"
                   subtitle="Having trouble after building your pc? this module is for you."
                 />
@@ -344,7 +350,7 @@ const HomeScreen = () => {
                   image={require("@/assets/images/ComponentMod.png")}
                   title="Pc Components Quiz"
                   subtitle="Tackle Your Knowledge of PC Components"
-                  score={quizScore}
+                  score={partsScore}
                 />
               </TouchableOpacity>
 
@@ -353,7 +359,7 @@ const HomeScreen = () => {
                   image={require("@/assets/images/SelectionMod.png")}
                   title="PC Parts Quiz"
                   subtitle="Do you know how to choose the right PC parts? Take this quiz to find out!"
-                  score={quizScore}
+                  score={ComponentsScore}
                 />
 
               </TouchableOpacity>
@@ -363,16 +369,16 @@ const HomeScreen = () => {
                   image={require("@/assets/images/BuildingMod.png")}
                   title="PC Builder Quiz"
                   subtitle="Think you're ready to build a PC? Building a PC is essential—test your knowledge with this quiz!"
-                  score={quizRef}
+                  score={BuildScore}
                 />
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => navigation.navigate("AfterBuildingQuiz")}>
                 <QuizCard
-                  image={require("@/assets/images/AfterBuildMod.png")}
+                  image={require("@/assets/images/AfterMod.png")}
                   title="PC Setup Quiz"
                   subtitle="Do you know exactly what to do after building your PC? Take the quiz to find out!"
-                  score={quizRef}
+                  score={AfterBuildScore}
                 />
               </TouchableOpacity>
 
@@ -576,7 +582,7 @@ const styles = StyleSheet.create({
   },
   quizCardLeft: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "Center",
     flex: 1,
   },
   quizCardRight: {

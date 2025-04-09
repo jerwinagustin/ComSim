@@ -13,9 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/COMSIM.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.anonymous.ComSim"
     },
     "web": {
       "bundler": "metro",
@@ -36,6 +37,14 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "f9f45f3a-d80b-4bab-96ec-f8caf5c7a103"
+      }
     }
   }
 }
