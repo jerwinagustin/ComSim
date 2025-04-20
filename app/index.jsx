@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,8 +11,15 @@ import {
 } from "react-native";
 import Svg, { Circle } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
-import { useRouter, useNavigation } from "expo-router";
+import { useRouter, useNavigation, useLocalSearchParams, useFocusEffect } from "expo-router";
 import { SharedElement } from "react-navigation-shared-element";
+import { useCallback } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+
+
+
+
 
 const ARROW_OFFSET = 5;
 const ARROW_HALF_WIDTH = 10;
@@ -21,11 +28,9 @@ const PANEL_OPEN_HEIGHT = 500;
 const CircularProgress = ({ score, size = 55, strokeWidth = 4, label }) => {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
-  // Calculate percentage
   const percentage = (score / 20) * 100;
   const strokeDashoffset = circumference - (circumference * percentage) / 100;
 
-  // Set color based on score; if score is 0, default to gray
   let strokeColor = "gray";
   if (score > 0 && score <= 9) {
     strokeColor = "red";
@@ -96,6 +101,14 @@ const HomeScreen = () => {
   const [selectedButton, setSelectedButton] = useState("");
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isQuizPanelOpen, setIsQuizPanelOpen] = useState(false);
+  const [partsScore, setPartsScore] = useState(0);
+  const [ComponentsScore, setComponentsScore] = useState(0);
+  const [BuildScore, setBuildScore] = useState(0);
+  const [AfterBuildScore, setAfterBuildScore] = useState(0);
+  const [introductionComplete, setIntroductionComplete] = useState(false);
+  const [partsComplete, setPartsComplete] = useState(false);
+  const [howToComplete, setHowToComplete] = useState(false);
+  const [afterBuildComplete, setAfterBuildComplete] = useState(false);
   const router = useRouter();
   const panelHeight = useRef(new Animated.Value(0)).current;
   const arrowX = useRef(new Animated.Value(0)).current;
@@ -104,11 +117,52 @@ const HomeScreen = () => {
   const learnRef = useRef(null);
   const quizRef = useRef(null);
 
-  // Default quiz score is 0 until the user takes the quiz.
-  const partsScore = 0;
-  const ComponentsScore = 0;
-  const BuildScore = 0;
-  const AfterBuildScore = 0;
+
+ 
+  const params = useLocalSearchParams();
+
+  useEffect(() => {
+    if (params?.partsScore !== undefined) {
+      setPartsScore(Number(params.partsScore));
+    }
+  }, [params]);
+
+  useEffect(() => {
+    if (params?.ComponentsScore !== undefined) {
+      setComponentsScore(Number(params.ComponentsScore));
+    }
+  }, [params]);
+
+
+  useEffect(() => {
+    if (params?.BuildScore !== undefined) {
+      setBuildScore(Number(params.BuildScore));
+    }
+  }, [params]);
+  useEffect(() => {
+    if (params?.AfterBuildScore !== undefined) {
+      setAfterBuildScore(Number(params.AfterBuildScore));
+    }
+  }, [params]);
+
+
+
+  useEffect(() => {
+    const loadCompletionFlags = async () => {
+      const intro = await AsyncStorage.getItem("introComplete");
+      const parts = await AsyncStorage.getItem("partsComplete");
+      const howTo = await AsyncStorage.getItem("howToComplete");
+      const afterBuild = await AsyncStorage.getItem("afterBuildComplete");
+  
+      setIntroductionComplete(intro === "true");
+      setPartsComplete(parts === "true");
+      setHowToComplete(howTo === "true");
+      setAfterBuildComplete(afterBuild === "true");
+    };
+  
+    const unsubscribe = navigation.addListener('focus', loadCompletionFlags);
+    return unsubscribe;
+  }, [navigation]);
 
   const togglePanel = () => {
     if (isPanelOpen) {
@@ -230,13 +284,13 @@ const HomeScreen = () => {
           </View>
         </View>
 
-        {/* Slogan */}
+
         <View style={styles.mainTextRow}>
           <Text style={styles.mainLeft}>Assemble. Customize. Optimize.</Text>
           <Text style={styles.mainRight}>Go Beyond!</Text>
         </View>
 
-        {/* Main Image */}
+
         <View style={styles.imageContainer}>
           <Image
             source={require("@/assets/images/Build_it_Today.png")}
@@ -245,10 +299,8 @@ const HomeScreen = () => {
           <Text style={styles.buildText}>Build it Today!</Text>
         </View>
 
-        {/* "Get Started" Title */}
         <Text style={styles.sectionTitle}>Get Started</Text>
 
-        {/* Buttons */}
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             ref={learnRef}
@@ -306,7 +358,8 @@ const HomeScreen = () => {
               colors={["#E2DFDF", "#ffffff"]}
               style={styles.gradientPanel}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("Introduction")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Introduction", {onGoBack: () => setIntroductionComplete(true)})}>
+
                 <ModuleCard
                   image={require("@/assets/images/ComponentMod.png")}
                   title="Introduction to pc components"
@@ -314,7 +367,8 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("Parts")}>
+              <TouchableOpacity onPress={() => navigation.navigate("Parts", {onGoBack: () => setPartsComplete(true)})}>
+
                 <ModuleCard
                   image={require("@/assets/images/SelectionMod.png")}
                   title="Parts selection guide for building pc"
@@ -322,7 +376,8 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("How_To")}>
+              <TouchableOpacity onPress={() => navigation.navigate("How_To", {onGoBack: () => setHowToComplete(true)})}>
+
                 <ModuleCard
                   image={require("@/assets/images/BuildingMod.png")}
                   title="How to build your pc?"
@@ -330,7 +385,8 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("After_Build")}>
+              <TouchableOpacity onPress={() => navigation.navigate("After_Build", {onGoBack: () => setAfterBuildComplete(true)})}>
+
                 <ModuleCard
                   image={require("@/assets/images/AfterMod.png")}
                   title="What to do after building your pc?"
@@ -345,26 +401,38 @@ const HomeScreen = () => {
               colors={["#E2DFDF", "#ffffff"]}
               style={styles.gradientPanel}
             >
-              <TouchableOpacity onPress={() => navigation.navigate("ComponentsQuiz")}>
+              <TouchableOpacity 
+              disabled={!introductionComplete}
+              style={{ opacity: introductionComplete ? 1 : 0.4 }}
+              onPress={() => navigation.navigate("ComponentsQuiz", { onGoBack: (score) => setComponentsScore(score) })}
+              > 
                 <QuizCard
                   image={require("@/assets/images/ComponentMod.png")}
-                  title="Pc Components Quiz"
+                  title="PC Components Quiz"
                   subtitle="Tackle Your Knowledge of PC Components"
-                  score={partsScore}
+                  score={ComponentsScore}
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress= {() => navigation.navigate("PartsQuiz")}>
+              <TouchableOpacity 
+              disabled={!partsComplete}
+              style={{ opacity: partsComplete ? 1 : 0.4 }}
+              onPress={() => navigation.navigate("PartsQuiz", { onGoBack: (score) => setPartsScore(score) })}
+              >
                 <QuizCard 
                   image={require("@/assets/images/SelectionMod.png")}
                   title="PC Parts Quiz"
                   subtitle="Do you know how to choose the right PC parts? Take this quiz to find out!"
-                  score={ComponentsScore}
+                  score={partsScore}
                 />
 
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("BuildQuiz")}>
+              <TouchableOpacity 
+              disabled={!howToComplete}
+              style={{ opacity: howToComplete ? 1 : 0.4 }}
+              onPress={() => navigation.navigate("BuildQuiz", { onGoBack: (score) => setBuildScore(score) })}
+              >
                 <QuizCard
                   image={require("@/assets/images/BuildingMod.png")}
                   title="PC Builder Quiz"
@@ -373,7 +441,11 @@ const HomeScreen = () => {
                 />
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => navigation.navigate("AfterBuildingQuiz")}>
+              <TouchableOpacity 
+              disabled={!afterBuildComplete}
+              style={{ opacity: afterBuildComplete ? 1 : 0.4 }}
+              onPress={() => navigation.navigate("AfterBuildingQuiz", { onGoBack: (score) => setAfterBuildScore(score) })}
+              >
                 <QuizCard
                   image={require("@/assets/images/AfterMod.png")}
                   title="PC Setup Quiz"

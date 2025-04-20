@@ -11,14 +11,28 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 
 import HomeScreen from './index';
+
+//Learning Manual
 import Introduction from './Learning_Modules/Introduction';
 import Parts from './Learning_Modules/Parts'
 import How_To from './Learning_Modules/How_To'
 import After_Build from './Learning_Modules/After_Build'
+
+//Quiz Main Screen
 import ComponentsQuiz from './Quizzes/ComponentsQuiz';
 import PartsQuiz from './Quizzes/PartsQuiz';
 import BuildQuiz from './Quizzes/BuildQuiz';
 import AfterBuildingQuiz from './Quizzes/AfterBuildingQuiz';
+
+
+//Review Screen
+import ReviewQuiz from './Review_Screen/ReviewQuiz';
+
+//Quiz Screen
+import PartScreen from './Quiz_Screen/PartScreen';
+import ComponentsScreen from './Quiz_Screen/ComponentsScreen';
+import BuildScreen from './Quiz_Screen/BuildScreen';
+import AfterBuldingScreen from './Quiz_Screen/AfterBuldingScreen';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -152,6 +166,12 @@ export default function RootLayout() {
               }
             }}
           />
+
+          <Stack.Screen name = "PartScreen" component={PartScreen} options={{ title: "Part", headerShown: false }} />
+          <Stack.Screen name="ReviewQuiz" component={ReviewQuiz} options={{ headerShown: false }}/>
+          <Stack.Screen name = "ComponentsScreen" component={ComponentsScreen} options={{ title: "Component", headerShown: false }} />
+          <Stack.Screen name = "BuildScreen" component={BuildScreen} options={{ title: "Build", headerShown: false }} />
+          <Stack.Screen name = "AfterBuildingScreen" component={AfterBuldingScreen} options={{ title: "After Build", headerShown: false }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>
