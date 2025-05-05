@@ -291,13 +291,15 @@ const HomeScreen = () => {
         </View>
 
 
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("@/assets/images/Build_it_Today.png")}
-            style={styles.pcImage}
-          />
-          <Text style={styles.buildText}>Build it Today!</Text>
-        </View>
+        <TouchableOpacity onPress={() => navigation.navigate("UnityScreen")}>
+  <View>
+    <Image
+      source={require("@/assets/images/Build_it_Today.png")}
+      style={styles.pcImage}
+    />
+    <Text style={styles.buildText}>Build it Today!</Text>
+  </View>
+</TouchableOpacity>
 
         <Text style={styles.sectionTitle}>Get Started</Text>
 

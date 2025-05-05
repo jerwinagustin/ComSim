@@ -12,7 +12,7 @@ const After_Build = () => {
   const navigation = useNavigation();
 
   const handleScroll = event => {
-    if (completed) return; // lock once completed
+    if (completed) return;
 
     const contentHeight = event.nativeEvent.contentSize.height;
     const scrollY = event.nativeEvent.contentOffset.y;

@@ -4,17 +4,20 @@
     "slug": "ComSim",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/COMSIM.png",  // Make sure the icon is square and at least 1024x1024px
+    "icon": "./assets/images/COMSIM.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/COMSIM.png",  // Ensure this image is centered and square
-        "backgroundColor": "#ffffff"  // Background color for adaptive icon
+        "foregroundImage": "./assets/images/COMSIM.png",
+        "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.ComSim"
     },
@@ -28,12 +31,13 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/COMSIM.png",  // Correct splash screen image path
+          "image": "./assets/images/COMSIM.png",
           "imageWidth": 200,
-          "resizeMode": "contain",  // You can adjust this if you need the image to fit better
+          "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "experiments": {
       "typedRoutes": true

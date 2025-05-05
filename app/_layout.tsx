@@ -11,6 +11,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 
 
 import HomeScreen from './index';
+import UnityScreen from './UnityScreen';
 
 //Learning Manual
 import Introduction from './Learning_Modules/Introduction';
@@ -172,6 +173,8 @@ export default function RootLayout() {
           <Stack.Screen name = "ComponentsScreen" component={ComponentsScreen} options={{ title: "Component", headerShown: false }} />
           <Stack.Screen name = "BuildScreen" component={BuildScreen} options={{ title: "Build", headerShown: false }} />
           <Stack.Screen name = "AfterBuildingScreen" component={AfterBuldingScreen} options={{ title: "After Build", headerShown: false }} />
+          <Stack.Screen name="Unity" component={UnityScreen} options={{ title: "Unity", headerShown: false }} />
+          <Stack.Screen name="UnityScreen" component={UnityScreen} options={{ title: "Unity", headerShown: false }} />
       </Stack.Navigator>
       <StatusBar style="auto" />
     </ThemeProvider>
