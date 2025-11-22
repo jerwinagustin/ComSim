@@ -16,6 +16,16 @@ expo-env.d.ts
 *.p12
 *.key
 *.mobileprovision
+*.keystore
+
+# Builds
+# Allow the specific release APK for recruiters to download
+# Ignore all other build artifacts
+builds/*.apk
+!builds/ComSim-v1.0.0.apk
+builds/*.aab
+android/app/build/
+android/.gradle/
 
 # Metro
 .metro-health-check*
