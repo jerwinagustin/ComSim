@@ -19,7 +19,7 @@
 
 ### 🎯 For Recruiters & Evaluators
 
-**📥 [Download ComSim APK (v1.0.0)](https://github.com/jerwinagustin/ComSim/raw/main/builds/ComSim-v1.0.0.apk)**
+**📥 [Download ComSim APK (Latest Version)](https://github.com/jerwinagustin/ComSim/releases/latest/download/ComSim.apk)**
 
 > **Quick Install Guide:**
 >

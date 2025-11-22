@@ -19,10 +19,8 @@ expo-env.d.ts
 *.keystore
 
 # Builds
-# Allow the specific release APK for recruiters to download
-# Ignore all other build artifacts
+# All APK files should be distributed via GitHub Releases (files are too large)
 builds/*.apk
-!builds/ComSim-v1.0.0.apk
 builds/*.aab
 android/app/build/
 android/.gradle/
